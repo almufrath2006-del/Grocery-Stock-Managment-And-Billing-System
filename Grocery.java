@@ -62,7 +62,7 @@ class Menu{
         item++; 
         prd.get(prdid).product_quantity-=quantity;
         double price= quantity*prd.get(prdid).product_price;
-        tprce+= quantity*prd.get(prdid).product_price;
+        tprce+=price;
         bill.add("ID:"+prdid+" PRODUCT:"+prd.get(prdid).product_name+" PRICE:"+prd.get(prdid).product_price+" QNT:"+quantity+" PRICE:"+price);f++;
         System.out.println(quantity+" "+prd.get(prdid).product_name+" Added to your cart!");
     }
@@ -222,7 +222,7 @@ class Menu{
                         System.out.println("Enter product Name.");
                         muf.nextLine();
                         String prdname=muf.nextLine();
-                        m.sd.add(prid+" "+ m.prd.get(prid).product_name+" "+m.prd.get(prid).product_price+" Stock name modified as  "+prdname);
+                        m.sd.add("ID:"+prid+" NAME:"+ m.prd.get(prid).product_name+" PRC:"+m.prd.get(prid).product_price+" Stock name modified as  "+prdname);
                         m.prd.get(prid).product_name=prdname;
                         System.out.println("Product Name modified as "+prdname);
                     }
@@ -230,7 +230,7 @@ class Menu{
                         System.out.println("Enter Product price");
                         double prdprc=muf.nextDouble();
                         m.tsv-=(m.prd.get(prid).product_price*m.prd.get(prid).product_quantity);
-                        m.sd.add("ID:"+prid+" NAME:"+ m.prd.get(prid).product_name+"PRC:"+m.prd.get(prid).product_price+" Stock price modified as "+prdprc);
+                        m.sd.add("ID:"+prid+" NAME:"+ m.prd.get(prid).product_name+" PRC:"+m.prd.get(prid).product_price+" Stock price modified as "+prdprc);
                         m.prd.get(prid).product_price=prdprc;
                         m.tsv+=(m.prd.get(prid).product_price*m.prd.get(prid).product_quantity);
                         System.out.println("Product price Modified as "+prdprc);
@@ -390,13 +390,25 @@ class Menu{
                     int choice2=muf.nextInt();
                     if (choice2==0) break;
                     else if(choice2==1){
-                        int amount=muf.nextInt();
-                        if(amount<=m.wallet){
-                            m.wallet-=amount;
-                            System.out.println("Payment successfull!");
+                        System.out.println("1.Pay Money.");
+                        System.out.println("2.Add Money.");
+                        int choice3=muf.nextInt();
+                        if(choice3==1){
+                            System.out.println("Enter Amount.");
+                            double amount=muf.nextInt();
+                            if(amount<=m.wallet){
+                                m.wallet-=amount;
+                                System.out.println("Payment successfull!");
+                            }
+                            else{
+                                System.out.println("You selecting above from wallet!");
+                            }
                         }
-                        else{
-                            System.out.println("You selecting above from wallet!");
+                        else if(choice3==2){
+                            System.out.println("Enter Amount.");
+                            double amount=muf.nextInt();
+                            m.wallet+=amount;
+                            System.out.println("Money Added successfull!");
                         }
                     }
                     else if(choice2==2){
