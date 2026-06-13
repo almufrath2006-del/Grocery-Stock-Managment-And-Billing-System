@@ -42,12 +42,26 @@ class Menu{
         System.out.println("Product Added to stock.");
         tsv+=prdprc*prdqnt;
     }
-    void viwe_product(int prdid){
+    void viwe_productID(int prdid){
         if(prd.containsKey(prdid)){
             prd.get(prdid).viewprd();
         }
         else{ 
             System.out.println("No product found!");
+        }
+    }
+    void viwe_productName(String prnm){
+        int m=0;
+        for (int k : prd.keySet()) {
+            if(prd.get(k).product_name.equals(prnm)){
+                prd.get(k).viewprd();
+            }
+            else{
+                m++;
+            }
+            if(m==prd.size()){
+                System.out.println("No Product found");
+            }
         }
     }
     void viwe_all_product(){
@@ -241,12 +255,30 @@ class Menu{
                 }
             }
             else if(choice==5){
-                while(true){
-                    System.out.println("\nEnter 0 for Exit.");
-                    System.out.println("Enter Product ID.");
-                    int prdid2=muf.nextInt();
-                    if(prdid2==0)break;
-                    m.viwe_product(prdid2);
+                System.out.println("1.viwe Product by ID");
+                System.out.println("2.Viwe Product by Name");
+                int chic=muf.nextInt();
+                if(chic==1){
+                    while(true){
+                        System.out.println("\nEnter 0 for Exit.");
+                        System.out.println("Enter Product ID.");
+                        int prdid=muf.nextInt();
+                        if(prdid==0)break;
+                        m.viwe_productID(prdid);
+                    }
+                }
+                if (chic==2) {
+                    muf.nextLine();
+                    while(true){
+                        System.out.println("\nEnter 0 for exit");
+                        System.out.println("Enter Product Name.");
+                        String prdnm=muf.nextLine();
+                        if(prdnm.equals("0"))break;
+                        m.viwe_productName(prdnm);
+                    }
+                }
+                else{
+                    System.out.println("Invalid choice.");
                 }
             }
             else if(choice==6){
@@ -331,7 +363,7 @@ class Menu{
                     else if(choice2==2){
                         System.out.println("Enter product S.NO.");
                         int sno=muf.nextInt();
-                        m.item-=1; 
+                        m.item-=1;
                         try{
                             m.prd.get(m.carInt.get(sno-1)).product_quantity+=m.carDbl.get(sno-1);
                             m.tprce-=(m.prd.get(m.carInt.get(sno-1)).product_price*m.carDbl.get(sno-1));
