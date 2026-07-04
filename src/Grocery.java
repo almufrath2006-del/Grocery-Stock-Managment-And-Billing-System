@@ -128,12 +128,12 @@ public class Grocery{
     int wallet=0;
     List<Integer>carInt=new ArrayList<>();
     List<Double>carDbl=new ArrayList<>();
-    void Bill(int id,double qn,int remId,double remDbl){
+    void Bill(int id,double qn,String name,int remId,double remDbl){
         try{
             Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/grocery","root","1234");
             Statement st=con.createStatement();
             ResultSet rs=st.executeQuery("select quantity from product where id="+id+";");
-            if(qn!=0){
+            if(name.equals("muf")&&remId==0){
                 try{
                     rs.next();
                     if(rs.getInt(1)>=qn){
@@ -155,6 +155,30 @@ public class Grocery{
                 catch(Exception e){
                     System.out.println("product not found");
                 }
+            }
+            else if(!name.equals("muf")){
+             try{
+                    ResultSet rs2=st.executeQuery("select quantity from product where name='"+name+"';");
+                    rs2.next();
+                    if(rs2.getInt(1)>=qn){
+                        int r=st.executeUpdate("update product set quantity=quantity-"+qn+" where name='"+name+"';");
+                        ResultSet price=st.executeQuery("select price from product where name='"+name+"';");
+                        price.next();
+                        double prc=price.getDouble(1);
+                        total+=prc*qn;
+                        ResultSet product=st.executeQuery("select name from product where name='"+name+"';");
+                        product.next();
+                        String prd=product.getString(1);
+                        cart.add("product:"+prd+" price:"+prc+" quantity:"+qn+" amt:"+prc*qn);
+                        System.out.println("product added to cart.");
+                    }
+                    else{
+                        System.out.println("above stock");
+                    }
+                }
+                catch(Exception e){
+                    System.out.println("product not found");
+                }   
             }
             else if(remDbl!=0){
                 int i=st.executeUpdate("update product set quantity=quantity+"+remDbl+" where id="+remId+";");
@@ -247,8 +271,7 @@ public class Grocery{
     }
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
-        jdbc obj=new jdbc();
-        
+        Grocery obj=new Grocery();
         while (true) {
             System.out.println("\nWellcome to JavaMart");
             System.out.println("1.Add New Product\n2.Remove Product\n3.Modify Stocks\n4.Modify Product Details\n5.View Products");
@@ -328,16 +351,34 @@ public class Grocery{
                 while(true){
                     System.out.println("\n1.Add Product\n2.Remove\n3.Cart\n4.Payment");
                     int chi=sc.nextInt();
+                    String name="muf";
                     if(chi==1){
                         while (true) {
-                            System.out.println("Enter Product ID:");
-                            int id=sc.nextInt();
-                            if(id==0)break;
-                            System.out.println("Enter Quantity:");
-                            Double qn=sc.nextDouble();
-                            obj.Bill(id,qn,0,0);
-                            obj.carInt.add(id);
-                            obj.carDbl.add(qn);
+                            System.out.println("\n1.By ID.\n2.By Name.");
+                            int chi2=sc.nextInt();
+                            if(chi2==1){
+                                System.out.println("Enter Product ID:");
+                                int id=sc.nextInt();
+                                if(id==0)break;
+                                System.out.println("Enter Quantity:");
+                                Double qn=sc.nextDouble();
+                                obj.Bill(id,qn,name,0,0);
+                                obj.carInt.add(id);
+                                obj.carDbl.add(qn);
+                            }
+                            else if(chi2==2){
+                                while (true) {
+                                    sc.nextLine();
+                                    System.out.println("Enter Product Name:");
+                                    name=sc.nextLine();
+                                    if(name.equals("0"))break;
+                                    System.out.println("Enter Quantity:");
+                                    Double qn=sc.nextDouble();
+                                    obj.Bill(0,qn,name,0,0);
+                                    obj.carDbl.add(qn);
+                                }
+                            }
+                            else if(chi2==0)break;
                         }
                     }
                     else if(chi==2){
@@ -346,7 +387,7 @@ public class Grocery{
                         try{
                         int id=obj.carInt.get(sno-1);
                         double qn=obj.carDbl.get(sno-1);
-                        obj.Bill(0,0,id,qn);
+                        obj.Bill(0,0,"muf",id,qn);
                         obj.cart.remove(sno-1);
                         }
                         catch(Exception e){
