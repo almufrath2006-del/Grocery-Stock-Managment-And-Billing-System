@@ -1,0 +1,3 @@
+This jar file was playing main role in Java Data Base Connectivity.Before trying to Run this program you have to add this jar file into
+java Reference Librery.You can get this jar file in browsers by searching Mysql connecter jar file,then you must me install MySql 
+in your system and user name as default "root" password as "1234".
