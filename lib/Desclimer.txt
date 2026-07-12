@@ -1,3 +1,7 @@
 This jar file was playing main role in Java Data Base Connectivity.Before trying to Run this program you have to add this jar file into
 java Reference Librery.You can get this jar file in browsers by searching Mysql connecter jar file,then you must me install MySql 
 in your system and user name as default "root" password as "1234".
+
+Then create a database named grocery and add 4 columns id int primary key, mentioning "primary key" it don't allow duplicates.
+name varchar, price double, quantity double. And create another table named sales_details and add one column sales_details varchar.
+And finally create another table named wallet and add one column wallet int and insert 0 into that column.
